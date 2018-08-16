@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Faculty_Science_3</string>
+    <string name="facebook_app_id">444009852751370</string>
+    <string name="fb_login_protocol_scheme">fb444009852751370</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

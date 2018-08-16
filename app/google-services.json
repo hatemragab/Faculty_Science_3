@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "406797405210",
+    "firebase_url": "https://facultyscience3-3ab53.firebaseio.com",
+    "project_id": "facultyscience3-3ab53",
+    "storage_bucket": "facultyscience3-3ab53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406797405210:android:3a513819220326c8",
+        "android_client_info": {
+          "package_name": "com.example.hatemragap.faculty_science_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406797405210-sfs2j9ki8h9vr2nssma9epgpiv40ira8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hatemragap.faculty_science_3",
+            "certificate_hash": "522d195a0f2529a49a7bfbf3f9062d511601b04d"
+          }
+        },
+        {
+          "client_id": "406797405210-45n15o72gd083de5fbablrpq5sce4t7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkQ2UkJfecQPtdGrYZFRbmNRCSleIs7Ng"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406797405210-45n15o72gd083de5fbablrpq5sce4t7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
