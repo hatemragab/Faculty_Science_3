@@ -42,7 +42,6 @@ public class Login_Activity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         data_reference = FirebaseDatabase.getInstance().getReference().child("users");
         mCallbackManager = CallbackManager.Factory.create();
-        mCallbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.button_facebook_login);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -109,8 +108,6 @@ public class Login_Activity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         startActivity(new Intent(Login_Activity.this, MainActivity.class).putExtra("name", user.getDisplayName()));
-
-
         finish();
     }
 

@@ -69,8 +69,6 @@ public class Algorizm_Old extends AppCompatActivity {
                     intent.putExtra("pdfUrl", urls[i]);
                     startActivity(intent);
 
-                    //new Tasks().execute(url);
-
 
 
             }
