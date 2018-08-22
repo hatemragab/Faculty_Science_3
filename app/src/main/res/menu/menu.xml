@@ -13,34 +13,7 @@
             android:id="@+id/hekalo_data"
 
             android:title="hekalo_data" />
-        <item
-            android:id="@+id/intri_to"
 
-            android:title="intri_to" />
-        <item
-            android:id="@+id/intri_to_bild"
-
-            android:title="intri_to_bild" />
-        <item
-            android:id="@+id/physics_alkam"
-
-            android:title="physics_alkam" />
-        <item
-            android:id="@+id/physics_reuada"
-
-            android:title="physics_reuada" />
-        <item
-            android:id="@+id/physics_solid"
-
-            android:title="physics_guamed" />
-        <item
-            android:id="@+id/physics_naway"
-
-            android:title="physics_naway" />
-        <item
-            android:id="@+id/program_language"
-
-            android:title="program_language" />
 
 
 
