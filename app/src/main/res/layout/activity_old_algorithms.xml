@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.hatemragap.faculty_science_3.Algorizm_Old">
+    tools:context="com.example.hatemragap.faculty_science_3.OldAlgorithms">
 
     <include
         android:id="@+id/tool_old"
@@ -13,9 +13,6 @@
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </ListView>
-
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

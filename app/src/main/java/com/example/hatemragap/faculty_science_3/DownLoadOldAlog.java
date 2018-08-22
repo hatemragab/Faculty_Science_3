@@ -1,12 +1,11 @@
 package com.example.hatemragap.faculty_science_3;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,8 +19,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public class DownLoadOldAlog extends AppCompatActivity {
@@ -33,7 +30,7 @@ public class DownLoadOldAlog extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_down_load_old_alog);
+        setContentView(R.layout.activity_download_old_alog);
         button = findViewById(R.id.btnDownloadOldAlog);
         intent = getIntent();
         final String url = intent.getStringExtra("pdfUrl");
@@ -148,14 +145,12 @@ public class DownLoadOldAlog extends AppCompatActivity {
             super.onPostExecute(s);
             Toast.makeText(DownLoadOldAlog.this, "done", Toast.LENGTH_SHORT).show();
             pDialog.dismiss();
-
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             bar.setProgress(values[0]);
-
         }
     }
 

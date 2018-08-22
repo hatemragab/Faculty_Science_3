@@ -1,12 +1,10 @@
 package com.example.hatemragap.faculty_science_3;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -25,8 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Arrays;
-
 public class Login_Activity extends AppCompatActivity {
     CallbackManager mCallbackManager;
     LoginButton loginButton;
@@ -36,13 +32,19 @@ public class Login_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_);
-        Toolbar toolbar = findViewById(R.id.toolLogin);
+
+        setContentView(R.layout.activity_login);
+        Toolbar toolbar = findViewById(R.id.toolbar_login);
         setSupportActionBar(toolbar);
+
+        // firebase authentication
         mAuth = FirebaseAuth.getInstance();
         data_reference = FirebaseDatabase.getInstance().getReference().child("users");
+
+        // facebook call back manager
         mCallbackManager = CallbackManager.Factory.create();
-        mCallbackManager = CallbackManager.Factory.create();
+
+        // login button
         loginButton = findViewById(R.id.button_facebook_login);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -59,7 +61,7 @@ public class Login_Activity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(Login_Activity.this, "you have error"+error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login_Activity.this, "you have error" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -67,6 +69,7 @@ public class Login_Activity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        // make firebase user
         FirebaseUser mu = FirebaseAuth.getInstance().getCurrentUser();
         if (mu != null) {
             startActivity(new Intent(Login_Activity.this, MainActivity.class));
@@ -84,7 +87,6 @@ public class Login_Activity extends AppCompatActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)

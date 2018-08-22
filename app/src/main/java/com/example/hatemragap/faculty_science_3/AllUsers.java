@@ -1,7 +1,7 @@
 package com.example.hatemragap.faculty_science_3;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,39 +18,39 @@ public class AllUsers extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // set all users layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_users);
-        recyclerView = findViewById(R.id.rec);
 
+        // configure and get all users from firebase
         final DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference("/users");
-
-        FirebaseRecyclerAdapter<Users, ViewHolderr> recAtapter = new FirebaseRecyclerAdapter<Users, ViewHolderr>(
-
+        FirebaseRecyclerAdapter<Users, ViewHolder> recAtapter = new FirebaseRecyclerAdapter<Users, ViewHolder>(
                 Users.class,
                 R.layout.user_item,
-                ViewHolderr.class,
+                ViewHolder.class,
                 mdatabase
         ) {
             @Override
-            protected void populateViewHolder(ViewHolderr viewHolder, Users model, int position) {
+            protected void populateViewHolder(ViewHolder viewHolder, Users model, int position) {
                 viewHolder.textName.setText(model.getName());
                 String s = model.getImgUrl();
                 Picasso.get().load(s).placeholder(R.drawable.person).into(viewHolder.imageView);
-
-
             }
         };
+
+        // show the user's in recycle view
+        recyclerView = findViewById(R.id.rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(recAtapter);
 
     }
 
-    public static class ViewHolderr extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textName;
         ImageView imageView;
         View view;
 
-        public ViewHolderr(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             textName = itemView.findViewById(R.id.recName);

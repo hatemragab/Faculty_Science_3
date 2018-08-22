@@ -30,9 +30,9 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
-                android:background="#66a9ec"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#66a9ec">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -49,18 +49,13 @@
         </FrameLayout>
     </LinearLayout>
 
-<android.support.design.widget.NavigationView
-    android:layout_width="match_parent"
-    android:layout_gravity="start"
-    android:id="@+id/nav_view"
-    app:menu="@menu/menu"
-    app:headerLayout="@layout/activity_navigation"
-    android:layout_height="match_parent">
-
-
-</android.support.design.widget.NavigationView>
-
-
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/activity_navigation"
+        app:menu="@menu/menu" />
 
 
 </android.support.v4.widget.DrawerLayout>
