@@ -81,6 +81,7 @@ public class ControlPanel extends AppCompatActivity {
         public ViewHolder(View itemView) {
             super(itemView);
             control_name = itemView.findViewById(R.id.control_name);
+
         }
     }
 
