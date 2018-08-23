@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "406797405210",
-    "firebase_url": "https://facultyscience3-3ab53.firebaseio.com",
-    "project_id": "facultyscience3-3ab53",
-    "storage_bucket": "facultyscience3-3ab53.appspot.com"
+    "project_number": "1092887833051",
+    "firebase_url": "https://faculty-science-3.firebaseio.com",
+    "project_id": "faculty-science-3",
+    "storage_bucket": "faculty-science-3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:406797405210:android:3a513819220326c8",
+        "mobilesdk_app_id": "1:1092887833051:android:3a513819220326c8",
         "android_client_info": {
           "package_name": "com.example.hatemragap.faculty_science_3"
         }
       },
       "oauth_client": [
         {
-          "client_id": "406797405210-sfs2j9ki8h9vr2nssma9epgpiv40ira8.apps.googleusercontent.com",
+          "client_id": "1092887833051-bin8kls6diosu64ebh1tdd1mu537jnvk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.hatemragap.faculty_science_3",
-            "certificate_hash": "522d195a0f2529a49a7bfbf3f9062d511601b04d"
+            "certificate_hash": "af2d4e55c13e5ed1f7abb609ae1958bd1528bbbc"
           }
         },
         {
-          "client_id": "406797405210-45n15o72gd083de5fbablrpq5sce4t7r.apps.googleusercontent.com",
+          "client_id": "1092887833051-dvnb6qvi5croio01lrl1eknjqsrlgimi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDkQ2UkJfecQPtdGrYZFRbmNRCSleIs7Ng"
+          "current_key": "AIzaSyDVxB3loSRCF5fhPmG8J-PdTOXO3XzDNUA"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "406797405210-45n15o72gd083de5fbablrpq5sce4t7r.apps.googleusercontent.com",
+              "client_id": "1092887833051-dvnb6qvi5croio01lrl1eknjqsrlgimi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

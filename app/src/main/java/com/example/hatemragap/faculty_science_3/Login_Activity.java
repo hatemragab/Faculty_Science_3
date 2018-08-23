@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -111,8 +114,6 @@ public class Login_Activity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         startActivity(new Intent(Login_Activity.this, MainActivity.class).putExtra("name", user.getDisplayName()));
-
-
         finish();
     }
 

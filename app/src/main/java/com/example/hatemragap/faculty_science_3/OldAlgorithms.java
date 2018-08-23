@@ -52,7 +52,6 @@ public class OldAlgorithms extends AppCompatActivity {
                 intent.putExtra("pdfUrl", urls[i]);
                 startActivity(intent);
 
-                //new Tasks().execute(url);
             }
         });
 
