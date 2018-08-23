@@ -1,13 +1,18 @@
 package com.example.hatemragap.faculty_science_3;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -26,6 +31,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class Login_Activity extends AppCompatActivity {
     CallbackManager mCallbackManager;
     LoginButton loginButton;
@@ -39,6 +47,7 @@ public class Login_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = findViewById(R.id.toolbar_login);
         setSupportActionBar(toolbar);
+
 
         // firebase authentication
         mAuth = FirebaseAuth.getInstance();
@@ -73,12 +82,13 @@ public class Login_Activity extends AppCompatActivity {
     @Override
     protected void onStart() {
         // make firebase user
+        super.onStart();
         FirebaseUser mu = FirebaseAuth.getInstance().getCurrentUser();
         if (mu != null) {
             startActivity(new Intent(Login_Activity.this, MainActivity.class));
             finish();
         }
-        super.onStart();
+
 
 
     }
@@ -104,7 +114,13 @@ public class Login_Activity extends AppCompatActivity {
                             users.setId(user.getUid());
                             users.setImgUrl(user.getPhotoUrl().toString());
                             data_reference.child(user.getUid()).setValue(users);
+                            Toast.makeText(Login_Activity.this, "done", Toast.LENGTH_SHORT).show();
                             updateUI(user);
+
+                        }
+                        else {
+                        Log.d("faceBookError",task.getException().getMessage());
+
                         }
 
 

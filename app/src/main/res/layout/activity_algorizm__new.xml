@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.hatemragap.faculty_science_3.Algorizm_New">
+    tools:context="com.example.hatemragap.faculty_science_3.Algorithms_New">
 
     <include
         android:id="@+id/tool_newalg"

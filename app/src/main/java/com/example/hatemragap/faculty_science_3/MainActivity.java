@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 builder.setPositiveButton("this year", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(new Intent(MainActivity.this, Algorizm_New.class));
+                        startActivity(new Intent(MainActivity.this, Algorithms_New.class));
                         drawerLayout.closeDrawer(GravityCompat.START);
                     }
                 });
