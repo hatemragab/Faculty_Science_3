@@ -27,5 +27,8 @@
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+    <string name="using_facebook_text">The only way to use this app is to login using Facebook</string>
+    <string name="down_arrow_description">down arrow hint\'s login using Facebook button</string>
+    <string name="only_way_description">only way to use the app is sign in using facebook</string>
 
 </resources>
