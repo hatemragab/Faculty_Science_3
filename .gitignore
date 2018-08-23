@@ -1,5 +1,6 @@
 *.iml
 /build
+.*json
 /captures
 /.idea/libraries
 /.gradle
