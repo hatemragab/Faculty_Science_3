@@ -83,6 +83,7 @@ public class ControlPanel extends AppCompatActivity {
             control_name = itemView.findViewById(R.id.control_name);
 
         }
+
     }
 
     @Override
