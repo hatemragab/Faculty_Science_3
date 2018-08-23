@@ -1,29 +1,30 @@
 package com.example.hatemragap.faculty_science_3;
 
 /**
- * Created by hatem on 8/22/2018.
+ * Created by hatem on 8/23/2018.
  */
 
-public class LectureModel {
+public class newAlgMoudle {
+
     private String downloadLink;
     private String name;
     private String size;
 
-    public LectureModel() {
+    public newAlgMoudle() {
     }
 
-    public LectureModel(String url, String name, String size) {
-        this.downloadLink = url;
+    public newAlgMoudle(String downloadLink, String name, String size) {
+        this.downloadLink = downloadLink;
         this.name = name;
         this.size = size;
     }
 
-    public String getUrl() {
+    public String getDownloadLink() {
         return downloadLink;
     }
 
-    public void setUrl(String url) {
-        this.downloadLink = url;
+    public void setDownloadLink(String downloadLink) {
+        this.downloadLink = downloadLink;
     }
 
     public String getName() {
@@ -41,6 +42,4 @@ public class LectureModel {
     public void setSize(String size) {
         this.size = size;
     }
-
-
 }

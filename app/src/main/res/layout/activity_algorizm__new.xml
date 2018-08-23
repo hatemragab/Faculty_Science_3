@@ -11,11 +11,14 @@
         android:id="@+id/tool_newalg"
         layout="@layout/toolbar" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:onClick="upload"
-        android:text="upload"
-        android:layout_height="wrap_content" />
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:id="@+id/recalgorithm"
+    android:padding="3dp"
 
+    android:layout_height="wrap_content">
+
+
+</android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
