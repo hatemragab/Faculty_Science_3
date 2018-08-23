@@ -2,17 +2,21 @@ package com.example.hatemragap.faculty_science_3;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +44,7 @@ public class ControlPanel extends AppCompatActivity {
     StorageReference algStorge;
     Uri pdfUrl;
     ProgressDialog progressDialog;
-
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class ControlPanel extends AppCompatActivity {
         dialog = new Dialog(this);
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
+        builder = new AlertDialog.Builder(this);
         muser = mAuth.getCurrentUser();
         myId = muser.getUid();
         algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg").child(myId);
@@ -127,42 +132,68 @@ public class ControlPanel extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data.getData() != null) {
-            pdfUrl = data.getData();
-            //get Name of file to store it in firebase Data base reference and Storage
-            String path = data.getData().getPath();
-            final String strPath = path.substring(path.lastIndexOf("/") + 1, path.length());
-            progressDialog.setMessage("please wait while we are uploading .....");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
 
-            algStorge.child(strPath).putFile(pdfUrl).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            builder.setMessage("Enter the name of pdf");
+            builder.setCancelable(false);
+            final EditText editText = new EditText(this);
 
+            builder.setView(editText);
+            builder.setPositiveButton("done", new DialogInterface.OnClickListener() {
                 @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                       /* Map<String, String> hashAlg = new HashMap<>();
-                        hashAlg.put("downloadLink", task.getResult().getDownloadUrl().toString());
-                        hashAlg.put("name", strPath);
-                        hashAlg.put("size", task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");*/
-                        LectureModel model = new LectureModel();
-                        model.setUrl(task.getResult().getDownloadUrl().toString());
-                        model.setName(strPath);
-                        model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    final String s = editText.getText().toString().trim();
+                    if (!TextUtils.isEmpty(s))
+                    {
 
-                        algReferenceRoot.push().setValue(model);
-                        progressDialog.dismiss();
+                        pdfUrl = data.getData();
+                        //get Name of file to store it in firebase Data base reference and Storage
 
-                        Toast.makeText(ControlPanel.this, "upload done", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ControlPanel.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
+
+                        progressDialog.setMessage("please wait while we are uploading .....");
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+
+                        algStorge.child(s).putFile(pdfUrl).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    LectureModel model = new LectureModel();
+                                    model.setUrl(task.getResult().getDownloadUrl().toString());
+                                    model.setName(s);
+                                    model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
+                                    DatabaseReference pushkey = algReferenceRoot.push();
+
+                                    algReferenceRoot.push().setValue(model);
+                                    progressDialog.dismiss();
+
+                                    Toast.makeText(ControlPanel.this, "upload done", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ControlPanel.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
+                            }
+                        });
+
                     }
+
+                    else {
+                        Toast.makeText(ControlPanel.this, "name is empty !", Toast.LENGTH_SHORT).show();
+                        editText.setError("name is empty !");
+                        editText.setFocusable(true);
+
+
+                    }
+
+
                 }
             });
+            builder.setNegativeButton("cancel", null);
+            builder.show();
 
 
         } else {
