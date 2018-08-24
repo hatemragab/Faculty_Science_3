@@ -14,13 +14,14 @@
             android:layout_height="wrap_content">
 
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageButton
                 android:id="@+id/delete_item"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:src="@drawable/delete_black_24dp" />
+
 
             <TextView
 

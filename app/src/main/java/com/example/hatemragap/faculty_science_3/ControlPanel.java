@@ -13,20 +13,27 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -71,8 +78,66 @@ public class ControlPanel extends AppCompatActivity {
 
         ) {
             @Override
-            protected void populateViewHolder(ViewHolder viewHolder, LectureModel model, int position) {
+            protected void populateViewHolder(ViewHolder viewHolder, final LectureModel model, int position) {
                 viewHolder.control_name.setText(model.getName() + "");
+
+                viewHolder.delete_item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder.setMessage("are you want to delete the file!");
+                        builder.setNegativeButton("cancel",null);
+                        builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialogInterface, int i) {
+
+                                progressDialog.setMessage("please wait ");
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                Query applesQuery = ref.child("newAlg").child(myId).orderByChild("name").equalTo(model.getName());
+
+                                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                                            appleSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful())
+                                                    {
+                                                        algStorge.child(model.getName()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                progressDialog.dismiss();
+                                                                dialogInterface.dismiss();
+                                                                Toast.makeText(ControlPanel.this, "deleted", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.e("data base error", "onCancelled", databaseError.toException());
+                                    }
+                                });
+
+
+                            }
+                        });
+                            builder.show();
+
+
+
+
+
+                    }
+                });
+
             }
         };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -82,10 +147,11 @@ public class ControlPanel extends AppCompatActivity {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView control_name;
-
+        ImageButton delete_item;
         public ViewHolder(View itemView) {
             super(itemView);
             control_name = itemView.findViewById(R.id.control_name);
+            delete_item = itemView.findViewById(R.id.delete_item);
 
         }
 
