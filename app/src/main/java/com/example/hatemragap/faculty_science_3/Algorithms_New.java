@@ -23,6 +23,14 @@ public class Algorithms_New extends AppCompatActivity {
     RecyclerView recyclerView;
     ProgressDialog progressDialog;
 
+    private static String humanReadableByteCount(long bytes) {
+        int unit = 1024;
+        if (bytes < unit) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        String pre = "kMGTPE".charAt(exp - 1) + "";
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,24 +52,19 @@ public class Algorithms_New extends AppCompatActivity {
             @Override
             protected void populateViewHolder(ViewHolder viewHolder, final LectureModel model, int position) {
 
-                viewHolder.pdfsize.setText(model.getSize());
                 viewHolder.control_name.setText(model.getName());
+                viewHolder.pdfsize.setText(humanReadableByteCount(Long.parseLong(model.getSize())));
                 final String url = model.getUrl();
                 viewHolder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent = new Intent(Algorithms_New.this,DownloadNewAlg.class);
-                        intent.putExtra("pdfUrl",url);
-                        intent.putExtra("pdfName",model.getName());
+                        Intent intent = new Intent(Algorithms_New.this, DownloadNewAlg.class);
+                        intent.putExtra("pdfUrl", url);
+                        intent.putExtra("pdfName", model.getName());
                         startActivity(intent);
-
-
                     }
                 });
-
-
-
             }
         };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -73,13 +76,14 @@ public class Algorithms_New extends AppCompatActivity {
         TextView control_name, pdfsize;
 
         View view;
+
         public ViewHolder(View itemView) {
             super(itemView);
             control_name = itemView.findViewById(R.id.control_name);
             pdfsize = itemView.findViewById(R.id.pdfsize);
             view = itemView;
         }
+
+
     }
-
-
 }
