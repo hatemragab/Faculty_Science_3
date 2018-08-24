@@ -52,6 +52,7 @@ public class ControlPanel extends AppCompatActivity {
     Uri pdfUrl;
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
+    AlertDialog.Builder builder1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class ControlPanel extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         builder = new AlertDialog.Builder(this);
+        builder1 = new AlertDialog.Builder(this);
         muser = mAuth.getCurrentUser();
         myId = muser.getUid();
         algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg").child(myId);
@@ -84,9 +86,10 @@ public class ControlPanel extends AppCompatActivity {
                 viewHolder.delete_item.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        builder.setMessage("are you want to delete the file!");
-                        builder.setNegativeButton("cancel",null);
-                        builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                        builder1.setMessage("are you want to delete the file!");
+                        builder1.setNegativeButton("cancel",null);
+                        builder1.setCancelable(false);
+                        builder1.setPositiveButton("delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(final DialogInterface dialogInterface, int i) {
 
@@ -129,7 +132,7 @@ public class ControlPanel extends AppCompatActivity {
 
                             }
                         });
-                            builder.show();
+                        builder1.show();
 
 
 
@@ -210,7 +213,7 @@ public class ControlPanel extends AppCompatActivity {
             builder.setView(editText);
             builder.setPositiveButton("done", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(final DialogInterface dialogInterface, int i) {
                     final String s = editText.getText().toString().trim();
                     if (!TextUtils.isEmpty(s)) {
 
@@ -231,15 +234,15 @@ public class ControlPanel extends AppCompatActivity {
                                     model.setUrl(task.getResult().getDownloadUrl().toString());
                                     model.setName(s);
                                     model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
-                                    DatabaseReference pushkey = algReferenceRoot.push();
 
                                     algReferenceRoot.push().setValue(model);
                                     progressDialog.dismiss();
-
+                                    dialogInterface.dismiss();
                                     Toast.makeText(ControlPanel.this, "upload done", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(ControlPanel.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
+                                    dialogInterface.dismiss();
                                 }
                             }
                         });
@@ -255,12 +258,18 @@ public class ControlPanel extends AppCompatActivity {
 
                 }
             });
-            builder.setNegativeButton("cancel", null);
+            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
             builder.show();
 
 
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+
         }
 
     }
