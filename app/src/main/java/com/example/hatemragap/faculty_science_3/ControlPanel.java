@@ -54,7 +54,7 @@ public class ControlPanel extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Control page ");
         recyclerView = findViewById(R.id.recControlPanel);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         dialog = new Dialog(this);
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -75,7 +75,7 @@ public class ControlPanel extends AppCompatActivity {
                 viewHolder.control_name.setText(model.getName() + "");
             }
         };
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
@@ -146,8 +146,7 @@ public class ControlPanel extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     final String s = editText.getText().toString().trim();
-                    if (!TextUtils.isEmpty(s))
-                    {
+                    if (!TextUtils.isEmpty(s)) {
 
                         pdfUrl = data.getData();
                         //get Name of file to store it in firebase Data base reference and Storage
@@ -179,9 +178,7 @@ public class ControlPanel extends AppCompatActivity {
                             }
                         });
 
-                    }
-
-                    else {
+                    } else {
                         Toast.makeText(ControlPanel.this, "name is empty !", Toast.LENGTH_SHORT).show();
                         editText.setError("name is empty !");
                         editText.setFocusable(true);
