@@ -11,8 +11,10 @@
     tools:context=".activity_navigation">
 
     <ImageView
+        android:id="@+id/userImage_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/user_image"
         android:src="@mipmap/ic_launcher" />
 
     <TextView
@@ -20,12 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="6dp"
-        android:text="hatem"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <TextView
         android:id="@+id/userMail_textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ing@dsfdsfdsg" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

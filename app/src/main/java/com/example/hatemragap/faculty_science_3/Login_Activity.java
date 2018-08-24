@@ -71,8 +71,7 @@ public class Login_Activity extends AppCompatActivity {
         super.onStart();
         FirebaseUser mu = FirebaseAuth.getInstance().getCurrentUser();
         if (mu != null) {
-            startActivity(new Intent(Login_Activity.this, MainActivity.class));
-            finish();
+            updateUI(mu);
         }
 
 
@@ -92,24 +91,27 @@ public class Login_Activity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Users users = new Users();
-                            users.setEmail(user.getEmail());
-                            users.setName(user.getDisplayName());
-                            users.setId(user.getUid());
-                            users.setImgUrl(user.getPhotoUrl().toString());
-                            data_reference.child(user.getUid()).setValue(users);
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            Users user = new Users();
+                            user.setEmail(firebaseUser.getEmail());
+                            user.setName(firebaseUser.getDisplayName());
+                            user.setId(firebaseUser.getUid());
+                            user.setImgUrl(firebaseUser.getPhotoUrl().toString());
+                            data_reference.child(firebaseUser.getUid()).setValue(user);
                             Toast.makeText(Login_Activity.this, "done", Toast.LENGTH_SHORT).show();
-                            updateUI(user);
+
+                            updateUI(firebaseUser);
                         } else {
                             Log.d("faceBookError", task.getException().getMessage());
-
                         }
                     }
                 });
     }
 
     private void updateUI(FirebaseUser user) {
+        System.out.println(user.getDisplayName());
+        Log.d("Test", "onStart: yes");
+        activity_navigation.setUserInformation(user);
         startActivity(new Intent(Login_Activity.this, MainActivity.class).putExtra("name", user.getDisplayName()));
         finish();
     }

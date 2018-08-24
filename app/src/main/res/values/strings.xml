@@ -32,5 +32,6 @@
     <string name="only_way_description">only way to use the app is sign in using facebook</string>
     <string name="lecture_size">Lecture size</string>
     <string name="lecture_name">Lecture name</string>
+    <string name="user_image">user image</string>
 
 </resources>
