@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/algorithms"
-            android:title="Algorithms" />
+            android:icon="@mipmap/ic_courses"
+            android:title="Algorithms"
+            app:showAsAction="always" />
 
         <item
             android:id="@+id/hekalo_data"
-            android:title="hekalo_data" />
+            android:icon="@mipmap/ic_courses"
+            android:title="hekalo_data"
+            app:showAsAction="always" />
     </group>
 
-    <item android:title="communicate">
+    <item android:title="Administration">
         <menu>
             <item
-                android:id="@+id/share"
-                android:title="Share" />
-
-            <item
                 android:id="@+id/all_users"
-                android:title="All users" />
+                android:icon="@mipmap/ic_administrator"
+                android:title="Users"
+                app:showAsAction="always" />
         </menu>
     </item>
 

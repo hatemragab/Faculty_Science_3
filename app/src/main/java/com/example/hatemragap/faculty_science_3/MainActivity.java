@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        // to show navigationView icon's
+        navigationView.setItemIconTintList(null);
 
         // Firebase authentication
         mAuth = FirebaseAuth.getInstance();

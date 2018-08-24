@@ -16,13 +16,15 @@
         android:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/username_textView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="6dp"
         android:text="hatem"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <TextView
+        android:id="@+id/userMail_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ing@dsfdsfdsg" />
