@@ -21,7 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DownLoadOldAlog extends AppCompatActivity {
+public class DownloadOldAlg extends AppCompatActivity {
     Dialog pDialog;
     Button button;
     Intent intent;
@@ -82,7 +82,7 @@ public class DownLoadOldAlog extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new Dialog(DownLoadOldAlog.this);
+            pDialog = new Dialog(DownloadOldAlg.this);
             View view = getLayoutInflater().inflate(R.layout.prograss_dailog, null, true);
             button = view.findViewById(R.id.cancel_DownLoad);
 
@@ -143,7 +143,7 @@ public class DownLoadOldAlog extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Toast.makeText(DownLoadOldAlog.this, "done", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DownloadOldAlg.this, "done", Toast.LENGTH_SHORT).show();
             pDialog.dismiss();
         }
 

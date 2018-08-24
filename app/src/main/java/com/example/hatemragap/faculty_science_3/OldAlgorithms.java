@@ -46,7 +46,7 @@ public class OldAlgorithms extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 PDF_Name = values[i];
-                Intent intent = new Intent(OldAlgorithms.this, DownLoadOldAlog.class);
+                Intent intent = new Intent(OldAlgorithms.this, DownloadOldAlg.class);
                 intent.putExtra("postion", i);// TODO change postion to position
                 intent.putExtra("pdfName", PDF_Name);
                 intent.putExtra("pdfUrl", urls[i]);

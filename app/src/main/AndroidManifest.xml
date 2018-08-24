@@ -29,8 +29,9 @@
         <activity android:name=".AllUsers" />
         <activity android:name=".OldAlgorithms" />
         <activity android:name=".Algorithms_New" />
-        <activity android:name=".DownLoadOldAlog" />
-        <activity android:name=".ControlPanel"></activity>
+        <activity android:name=".DownloadOldAlg" />
+        <activity android:name=".ControlPanel" />
+        <activity android:name=".DownloadNewAlg"></activity>
     </application>
 
 </manifest>
