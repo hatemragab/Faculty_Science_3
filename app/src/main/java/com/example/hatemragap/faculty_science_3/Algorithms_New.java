@@ -23,7 +23,7 @@ public class Algorithms_New extends AppCompatActivity {
     RecyclerView recyclerView;
     ProgressDialog progressDialog;
 
-    private static String humanReadableByteCount(long bytes) {
+    public static String humanReadableByteCount(long bytes) {
         int unit = 1024;
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
@@ -52,16 +52,18 @@ public class Algorithms_New extends AppCompatActivity {
             @Override
             protected void populateViewHolder(ViewHolder viewHolder, final LectureModel model, int position) {
 
-                viewHolder.control_name.setText(model.getName());
+                viewHolder.lecture_name.setText(model.getLecturename());
                 viewHolder.pdfsize.setText(humanReadableByteCount(Long.parseLong(model.getSize())));
-                final String url = model.getUrl();
+                viewHolder.date.setText(model.getDate());
+                viewHolder.uploader_name.setText(model.getUploder_name());
+                final String url = model.getDownloadLink();
                 viewHolder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         Intent intent = new Intent(Algorithms_New.this, DownloadNewAlg.class);
                         intent.putExtra("pdfUrl", url);
-                        intent.putExtra("pdfName", model.getName());
+                        intent.putExtra("pdfName", model.getLecturename());
                         startActivity(intent);
                     }
                 });
@@ -73,14 +75,16 @@ public class Algorithms_New extends AppCompatActivity {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView control_name, pdfsize;
+        TextView uploader_name, pdfsize,date,lecture_name;
 
         View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            control_name = itemView.findViewById(R.id.control_name);
+            date = itemView.findViewById(R.id.date);
+            uploader_name = itemView.findViewById(R.id.uploader_name);
             pdfsize = itemView.findViewById(R.id.pdfsize);
+            lecture_name = itemView.findViewById(R.id.lecture_name);
             view = itemView;
         }
 

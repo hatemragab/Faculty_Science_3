@@ -38,6 +38,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,13 +83,16 @@ public class ControlPanel extends AppCompatActivity {
         ) {
             @Override
             protected void populateViewHolder(ViewHolder viewHolder, final LectureModel model, int position) {
-                viewHolder.control_name.setText(model.getName() + "");
-
+                viewHolder.lecture_name.setText(model.getLecturename() + "");
+                viewHolder.delete_item.setVisibility(View.VISIBLE);
+                viewHolder.date.setText(model.getDate());
+                viewHolder.uploader_name.setText(model.getUploder_name());
+                viewHolder.pdfsize.setText(Algorithms_New.humanReadableByteCount(Long.parseLong(model.getSize())));
                 viewHolder.delete_item.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         builder1.setMessage("are you want to delete the file!");
-                        builder1.setNegativeButton("cancel",null);
+                        builder1.setNegativeButton("cancel", null);
                         builder1.setCancelable(false);
                         builder1.setPositiveButton("delete", new DialogInterface.OnClickListener() {
                             @Override
@@ -97,18 +102,17 @@ public class ControlPanel extends AppCompatActivity {
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                Query applesQuery = ref.child("newAlg").child(myId).orderByChild("name").equalTo(model.getName());
+                                Query applesQuery = ref.child("newAlg").child(myId).orderByChild("name").equalTo(model.getLecturename());
 
                                 applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                                             appleSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful())
-                                                    {
-                                                        algStorge.child(model.getName()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    if (task.isSuccessful()) {
+                                                        algStorge.child(model.getLecturename()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
                                                                 progressDialog.dismiss();
@@ -135,9 +139,6 @@ public class ControlPanel extends AppCompatActivity {
                         builder1.show();
 
 
-
-
-
                     }
                 });
 
@@ -149,11 +150,15 @@ public class ControlPanel extends AppCompatActivity {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView control_name;
+        TextView uploader_name, pdfsize,date,lecture_name;
         ImageButton delete_item;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            control_name = itemView.findViewById(R.id.control_name);
+            date = itemView.findViewById(R.id.date);
+            uploader_name = itemView.findViewById(R.id.uploader_name);
+            pdfsize = itemView.findViewById(R.id.pdfsize);
+            lecture_name = itemView.findViewById(R.id.lecture_name);
             delete_item = itemView.findViewById(R.id.delete_item);
 
         }
@@ -231,8 +236,10 @@ public class ControlPanel extends AppCompatActivity {
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     LectureModel model = new LectureModel();
-                                    model.setUrl(task.getResult().getDownloadUrl().toString());
-                                    model.setName(s);
+                                    model.setDownloadLink(task.getResult().getDownloadUrl().toString());
+                                    model.setLecturename(s);
+                                    model.setDate(getCurrentDate());
+                                    model.setUploder_name(muser.getDisplayName() + "");
                                     model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
 
                                     algReferenceRoot.push().setValue(model);
@@ -272,6 +279,17 @@ public class ControlPanel extends AppCompatActivity {
 
         }
 
+    }
+
+    private String getCurrentDate() {
+        Date dateee = new Date(); // your date
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateee);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String datePone = day + "/" + month + "/" + year;
+        return datePone;
     }
 
 }
