@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="match_parent"
-    android:padding="8dp"
-    android:textSize="18sp"
-    android:text="Algorithm                 "
-    android:id="@+id/algoUploadBtn"
-    android:layout_marginLeft="2dp"
 
-    android:drawableLeft="@drawable/folder_black_24dp"
-    android:textAlignment="gravity"
+    <TextView
+        android:id="@+id/algoUploadBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:drawableLeft="@drawable/folder_black_24dp"
+        android:padding="8dp"
 
-    android:layout_height="wrap_content" />
+        android:text="Algorithm                 "
+        android:textAlignment="gravity"
+
+        android:textSize="18sp" />
 </LinearLayout>

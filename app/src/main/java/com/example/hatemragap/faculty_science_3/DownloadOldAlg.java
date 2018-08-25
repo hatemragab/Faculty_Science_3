@@ -97,7 +97,7 @@ public class DownloadOldAlg extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             int count;
-            InputStream input=null;
+            InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
             try {
@@ -116,7 +116,7 @@ public class DownloadOldAlg extends AppCompatActivity {
 
                 input = new BufferedInputStream(uri.openStream(), 16192);
 
-                 output = new FileOutputStream(fDirectory + "/" + intent.getStringExtra("pdfName") + ".pdf");
+                output = new FileOutputStream(fDirectory + "/" + intent.getStringExtra("pdfName") + ".pdf");
 
                 byte data[] = new byte[2000];
                 long total = 0;
@@ -136,17 +136,14 @@ public class DownloadOldAlg extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally{
+            } finally {
                 try {
                     output.flush();
                     connection.disconnect();
                     // closing streams
                     output.close();
                     input.close();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
 
                 }
 

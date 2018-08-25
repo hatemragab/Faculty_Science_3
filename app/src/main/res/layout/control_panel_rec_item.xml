@@ -47,9 +47,9 @@
 
             <LinearLayout
                 android:id="@+id/l2"
-                android:layout_below="@+id/l1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/l1"
                 android:layout_marginTop="2dp"
                 android:orientation="horizontal">
 
@@ -72,10 +72,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_below="@+id/l2"
                 android:id="@+id/l3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/l2"
                 android:layout_marginTop="2dp"
                 android:orientation="horizontal">
 
@@ -98,14 +98,14 @@
             </LinearLayout>
 
             <ImageButton
-                android:visibility="gone"
                 android:id="@+id/delete_item"
-                android:src="@drawable/delete_black_24dp"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
                 android:layout_above="@+id/l3"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
+                android:src="@drawable/delete_black_24dp"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -125,8 +125,6 @@
                     android:layout_height="wrap_content"
                     android:text="date : "
                     android:textSize="16sp" />
-
-
 
 
             </LinearLayout>

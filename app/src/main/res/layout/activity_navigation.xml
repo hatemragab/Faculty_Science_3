@@ -6,8 +6,7 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    >
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:id="@+id/userImage_imageView"
@@ -17,11 +16,11 @@
         android:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:text="dsf"
         android:id="@+id/username_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="6dp"
+        android:text="dsf"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <TextView

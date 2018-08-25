@@ -5,5 +5,6 @@
         android:id="@+id/upload"
         android:icon="@drawable/file_upload_black_24dp"
 
-        app:showAsAction="always" android:title="upload pdf"/>
+        android:title="upload pdf"
+        app:showAsAction="always" />
 </menu>

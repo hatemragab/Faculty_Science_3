@@ -5,10 +5,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.drive.Drive;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -41,8 +40,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ControlPanel extends AppCompatActivity {
     Dialog dialog;
@@ -113,23 +110,22 @@ public class ControlPanel extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                            Log.d("datasnap",appleSnapshot.getRef().child("uploder_id").toString());
-                                                algReferenceRoot.child(appleSnapshot.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            algStorge.child(model.getLecturename()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    progressDialog.dismiss();
-                                                                    dialogInterface.dismiss();
-                                                                    Toast.makeText(ControlPanel.this, "deleted", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            });
-                                                        }
+                                            Log.d("datasnap", appleSnapshot.getRef().child("uploder_id").toString());
+                                            algReferenceRoot.child(appleSnapshot.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        algStorge.child(model.getLecturename()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                progressDialog.dismiss();
+                                                                dialogInterface.dismiss();
+                                                                Toast.makeText(ControlPanel.this, "deleted", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
                                                     }
-                                                });
-
+                                                }
+                                            });
 
 
                                         }
@@ -141,8 +137,7 @@ public class ControlPanel extends AppCompatActivity {
                                         Log.e("data base error", "onCancelled", databaseError.toException());
                                     }
                                 });
-                                }
-
+                            }
 
 
                         });
@@ -156,23 +151,6 @@ public class ControlPanel extends AppCompatActivity {
         };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-    }
-
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView uploader_name, pdfsize, date, lecture_name;
-        ImageButton delete_item;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            date = itemView.findViewById(R.id.date);
-            uploader_name = itemView.findViewById(R.id.uploader_name);
-            pdfsize = itemView.findViewById(R.id.pdfsize);
-            lecture_name = itemView.findViewById(R.id.lecture_name);
-            delete_item = itemView.findViewById(R.id.delete_item);
-
-        }
-
     }
 
     @Override
@@ -300,6 +278,22 @@ public class ControlPanel extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         String datePone = day + "/" + month + "/" + year;
         return datePone;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView uploader_name, pdfsize, date, lecture_name;
+        ImageButton delete_item;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            date = itemView.findViewById(R.id.date);
+            uploader_name = itemView.findViewById(R.id.uploader_name);
+            pdfsize = itemView.findViewById(R.id.pdfsize);
+            lecture_name = itemView.findViewById(R.id.lecture_name);
+            delete_item = itemView.findViewById(R.id.delete_item);
+
+        }
+
     }
 
 }

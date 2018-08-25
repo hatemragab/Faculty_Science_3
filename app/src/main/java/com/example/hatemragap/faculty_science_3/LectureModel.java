@@ -16,13 +16,13 @@ public class LectureModel {
     public LectureModel() {
     }
 
-    public LectureModel(String downloadLink, String lecturename, String size, String date, String uploder_name,String uploder_id) {
+    public LectureModel(String downloadLink, String lecturename, String size, String date, String uploder_name, String uploder_id) {
         this.downloadLink = downloadLink;
         this.lecturename = lecturename;
         this.size = size;
         this.date = date;
         this.uploder_name = uploder_name;
-        this.uploder_id=uploder_id;
+        this.uploder_id = uploder_id;
     }
 
     public String getDownloadLink() {
