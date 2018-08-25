@@ -167,6 +167,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.upload:
 
+//your code
+
+
                 startActivity(new Intent(MainActivity.this, ControlPanel.class));
                 break;
         }
