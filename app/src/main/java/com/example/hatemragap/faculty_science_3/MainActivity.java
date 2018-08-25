@@ -18,8 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,16 +27,12 @@ import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    FirebaseUser user;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
 
-    FirebaseAuth mAuth;
-
     DatabaseReference database;
-    String myId;
     private TextView usernameTextView, userMailTextView;
 
     private ImageView userImageView;
@@ -66,9 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // to show navigationView icon's
         navigationView.setItemIconTintList(null);
 
-        // Firebase authentication
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        // get user from intent
+        User user = (User) getIntent().getSerializableExtra("user");
 
         //
         drawerLayout = findViewById(R.id.drower);
@@ -77,15 +70,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        myId = user.getUid();
-
-        database = FirebaseDatabase.getInstance().getReference().child("users").child(myId);
+        database = FirebaseDatabase.getInstance().getReference().child("users").child(user.getId());
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String email = dataSnapshot.child("email").getValue(String.class);
-
                 String imgurl = dataSnapshot.child("imgUrl").getValue(String.class);
                 String name = dataSnapshot.child("name").getValue(String.class);
                 usernameTextView.setText(name);

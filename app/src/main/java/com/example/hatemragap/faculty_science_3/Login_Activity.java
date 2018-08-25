@@ -24,9 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Login_Activity extends AppCompatActivity {
-    CallbackManager mCallbackManager;
-    LoginButton loginButton;
-    DatabaseReference data_reference;
+
+    private LoginButton loginButton;
+
+    private CallbackManager mCallbackManager;
+    private DatabaseReference data_reference;
     private FirebaseAuth mAuth;
 
     @Override
@@ -54,12 +56,15 @@ public class Login_Activity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(Login_Activity.this, "you must accept to continue", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login_Activity.this, "Sorry but you must " +
+                        "accept the conditions to continue", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(Login_Activity.this, "you have error" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login_Activity.this, "Error in login facebook " +
+                        ", please check you account then try again \n" +
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -92,24 +97,31 @@ public class Login_Activity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            Users user = new Users();
-                            user.setEmail(firebaseUser.getEmail());
-                            user.setName(firebaseUser.getDisplayName());
-                            user.setId(firebaseUser.getUid());
-                            user.setImgUrl(firebaseUser.getPhotoUrl().toString());
-                            data_reference.child(firebaseUser.getUid()).setValue(user);
-                            Toast.makeText(Login_Activity.this, "done", Toast.LENGTH_SHORT).show();
+                            if (firebaseUser != null) {
 
-                            updateUI(firebaseUser);
-                        } else {
-                            Log.d("faceBookError", task.getException().getMessage());
+                                // insert user to firebase
+                                User user = new User(firebaseUser);
+                                data_reference.child(firebaseUser.getUid()).setValue(user);
+
+                                // inform user
+                                Toast.makeText(Login_Activity.this,
+                                        "Logged in successful", Toast.LENGTH_SHORT).show();
+
+                                updateUI(firebaseUser);
+                                return;
+                            }
                         }
+                        Log.e("facebook", task.getException().getMessage());
                     }
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-        startActivity(new Intent(Login_Activity.this, MainActivity.class).putExtra("name", user.getDisplayName()));
+    private void updateUI(FirebaseUser firebaseUser) {
+
+        startActivity(
+                new Intent(Login_Activity.this, MainActivity.class)
+                        .putExtra("user", new User(firebaseUser))
+        );
         finish();
     }
 

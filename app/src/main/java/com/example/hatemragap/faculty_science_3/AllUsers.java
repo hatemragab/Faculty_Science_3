@@ -24,14 +24,14 @@ public class AllUsers extends AppCompatActivity {
 
         // configure and get all users from firebase
         final DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference("/users");
-        FirebaseRecyclerAdapter<Users, ViewHolder> recAtapter = new FirebaseRecyclerAdapter<Users, ViewHolder>(
-                Users.class,
+        FirebaseRecyclerAdapter<User, ViewHolder> recAtapter = new FirebaseRecyclerAdapter<User, ViewHolder>(
+                User.class,
                 R.layout.user_item,
                 ViewHolder.class,
                 mdatabase
         ) {
             @Override
-            protected void populateViewHolder(ViewHolder viewHolder, Users model, int position) {
+            protected void populateViewHolder(ViewHolder viewHolder, User model, int position) {
                 viewHolder.textName.setText(model.getName());
                 String s = model.getImgUrl();
                 Picasso.get().load(s).placeholder(R.drawable.person).into(viewHolder.imageView);
