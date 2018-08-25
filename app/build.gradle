@@ -44,7 +44,7 @@ dependencies {
 
     // Image dependence's
     implementation 'com.squareup.picasso:picasso:2.71828'
-
+    implementation 'com.google.android.gms:play-services-drive:11.6.0'
     /* TODO add testing to project (after finish everything)
     // Testing dependence's
     testImplementation 'junit:junit:4.12'

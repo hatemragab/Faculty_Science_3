@@ -40,7 +40,7 @@ public class Algorithms_New extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         muser = mAuth.getCurrentUser();
         myId = muser.getUid();
-        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg").child(myId);
+        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg");
 
 
         FirebaseRecyclerAdapter<LectureModel, ViewHolder> adapter = new FirebaseRecyclerAdapter<LectureModel, ViewHolder>(
@@ -75,7 +75,7 @@ public class Algorithms_New extends AppCompatActivity {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView uploader_name, pdfsize,date,lecture_name;
+        TextView uploader_name, pdfsize, date, lecture_name;
 
         View view;
 

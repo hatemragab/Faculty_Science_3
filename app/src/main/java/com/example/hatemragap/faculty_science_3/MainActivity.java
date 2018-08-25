@@ -13,17 +13,37 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    FirebaseAuth mAuth;
+
     FirebaseUser user;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
+
+    FirebaseAuth mAuth;
+
+    DatabaseReference database;
+    String myId;
+    private TextView usernameTextView, userMailTextView;
+
+    private ImageView userImageView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View view = navigationView.getHeaderView(0);
+        usernameTextView = view.findViewById(R.id.username_textView);
+        userMailTextView = view.findViewById(R.id.userMail_textView);
+        userImageView = view.findViewById(R.id.userImage_imageView);
+
         // to show navigationView icon's
         navigationView.setItemIconTintList(null);
 
@@ -52,6 +77,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.open, R.string.close);
         actionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        myId = user.getUid();
+
+        database = FirebaseDatabase.getInstance().getReference().child("users").child(myId);
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String email = dataSnapshot.child("email").getValue(String.class);
+
+                String imgurl = dataSnapshot.child("imgUrl").getValue(String.class);
+                String name = dataSnapshot.child("name").getValue(String.class);
+                usernameTextView.setText(name);
+                userMailTextView.setText(email);
+                Picasso.get().load(imgurl).into(userImageView);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
 
     }
 

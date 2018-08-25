@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -72,7 +73,7 @@ public class ControlPanel extends AppCompatActivity {
         builder1 = new AlertDialog.Builder(this);
         muser = mAuth.getCurrentUser();
         myId = muser.getUid();
-        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg").child(myId);
+        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg");
         algStorge = FirebaseStorage.getInstance().getReference().child("newAlg");
         FirebaseRecyclerAdapter<LectureModel, ViewHolder> adapter = new FirebaseRecyclerAdapter<LectureModel, ViewHolder>(
                 LectureModel.class,
@@ -81,8 +82,9 @@ public class ControlPanel extends AppCompatActivity {
                 algReferenceRoot
 
         ) {
+
             @Override
-            protected void populateViewHolder(ViewHolder viewHolder, final LectureModel model, int position) {
+            protected void populateViewHolder(final ViewHolder viewHolder, final LectureModel model, int position) {
                 viewHolder.lecture_name.setText(model.getLecturename() + "");
                 viewHolder.delete_item.setVisibility(View.VISIBLE);
                 viewHolder.date.setText(model.getDate());
@@ -101,40 +103,48 @@ public class ControlPanel extends AppCompatActivity {
                                 progressDialog.setMessage("please wait ");
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
+
+
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                                Query applesQuery = ref.child("newAlg").child(myId).orderByChild("name").equalTo(model.getLecturename());
+
+                                Query applesQuery = ref.child("newAlg").orderByChild("uploder_id").equalTo(myId);
 
                                 applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                            appleSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        algStorge.child(model.getLecturename()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                                progressDialog.dismiss();
-                                                                dialogInterface.dismiss();
-                                                                Toast.makeText(ControlPanel.this, "deleted", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
+                                            Log.d("datasnap",appleSnapshot.getRef().child("uploder_id").toString());
+                                                algReferenceRoot.child(appleSnapshot.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            algStorge.child(model.getLecturename()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    progressDialog.dismiss();
+                                                                    dialogInterface.dismiss();
+                                                                    Toast.makeText(ControlPanel.this, "deleted", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                        }
                                                     }
-                                                }
-                                            });
+                                                });
+
+
 
                                         }
                                     }
+
 
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                         Log.e("data base error", "onCancelled", databaseError.toException());
                                     }
                                 });
+                                }
 
 
-                            }
+
                         });
                         builder1.show();
 
@@ -150,7 +160,7 @@ public class ControlPanel extends AppCompatActivity {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView uploader_name, pdfsize,date,lecture_name;
+        TextView uploader_name, pdfsize, date, lecture_name;
         ImageButton delete_item;
 
         public ViewHolder(View itemView) {
@@ -241,7 +251,7 @@ public class ControlPanel extends AppCompatActivity {
                                     model.setDate(getCurrentDate());
                                     model.setUploder_name(muser.getDisplayName() + "");
                                     model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
-
+                                    model.setUploder_id(myId);
                                     algReferenceRoot.push().setValue(model);
                                     progressDialog.dismiss();
                                     dialogInterface.dismiss();

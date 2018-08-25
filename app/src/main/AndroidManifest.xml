@@ -25,7 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity_navigation" />
         <activity android:name=".AllUsers" />
         <activity android:name=".OldAlgorithms" />
         <activity android:name=".Algorithms_New" />

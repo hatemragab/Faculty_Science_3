@@ -109,9 +109,6 @@ public class Login_Activity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        System.out.println(user.getDisplayName());
-        Log.d("Test", "onStart: yes");
-        activity_navigation.setUserInformation(user);
         startActivity(new Intent(Login_Activity.this, MainActivity.class).putExtra("name", user.getDisplayName()));
         finish();
     }
