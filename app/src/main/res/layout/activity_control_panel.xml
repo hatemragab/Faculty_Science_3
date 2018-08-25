@@ -10,13 +10,25 @@
         android:id="@+id/toolControl"
         layout="@layout/toolbar" />
 
-
-    <android.support.v7.widget.RecyclerView
+    <TextView
         android:layout_width="match_parent"
-        android:id="@+id/recControlPanel"
+        android:text="my Lectures "
+        android:textAlignment="center"
+        android:textColor="#123"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:textStyle="italic"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolControl">
+        android:layout_below="@+id/toolControl"
+        android:id="@+id/textView" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recControlPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView">
 
 
     </android.support.v7.widget.RecyclerView>

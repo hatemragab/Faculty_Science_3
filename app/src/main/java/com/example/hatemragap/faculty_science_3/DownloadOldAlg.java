@@ -42,14 +42,14 @@ public class DownloadOldAlg extends AppCompatActivity {
                 try {
                     URL url1 = new URL(url);
                     HttpURLConnection urlConnection = (HttpURLConnection) url1.openConnection();
-
-                    final int lenth = urlConnection.getContentLength();
+                    final int lenghth = urlConnection.getContentLength();
+                    urlConnection.disconnect();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            long sizeInMb = lenth / (1024 * 1024);
+                            String s = Algorithms_New.humanReadableByteCount(lenghth);
 
-                            button.setText(sizeInMb + "MB");
+                            button.setText(s);
                         }
                     });
 
@@ -97,6 +97,9 @@ public class DownloadOldAlg extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             int count;
+            InputStream input=null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
             try {
                 String root = Environment.getExternalStorageDirectory().toString();
                 File fDirectory = new File(root + "/lectures/oldAlog");
@@ -107,13 +110,13 @@ public class DownloadOldAlg extends AppCompatActivity {
 
                 URL uri = new URL(strings[0]);
 
-                HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+                connection = (HttpURLConnection) uri.openConnection();
                 connection.connect();
                 int lenghtOfFile = connection.getContentLength();
 
-                final InputStream input = new BufferedInputStream(uri.openStream(), 16192);
+                input = new BufferedInputStream(uri.openStream(), 16192);
 
-                final OutputStream output = new FileOutputStream(fDirectory + "/" + intent.getStringExtra("pdfName") + ".pdf");
+                 output = new FileOutputStream(fDirectory + "/" + intent.getStringExtra("pdfName") + ".pdf");
 
                 byte data[] = new byte[2000];
                 long total = 0;
@@ -127,15 +130,26 @@ public class DownloadOldAlg extends AppCompatActivity {
                     publishProgress(t);
                 }
 
-                // flushing output
-                output.flush();
 
-                // closing streams
-                output.close();
-                input.close();
+                // flushing output
+
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            finally{
+                try {
+                    output.flush();
+                    connection.disconnect();
+                    // closing streams
+                    output.close();
+                    input.close();
+                }
+                catch (Exception e)
+                {
+
+                }
+
             }
             return null;
         }
