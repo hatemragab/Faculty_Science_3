@@ -2,10 +2,13 @@ package com.example.hatemragap.faculty_science_3;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +54,7 @@ public class ControlPanel extends AppCompatActivity {
     StorageReference algStorge;
     Uri pdfUrl;
     ProgressDialog progressDialog;
-    AlertDialog.Builder builder;
+
     AlertDialog.Builder builder1;
 
     @Override
@@ -66,7 +69,7 @@ public class ControlPanel extends AppCompatActivity {
         dialog = new Dialog(this);
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
-        builder = new AlertDialog.Builder(this);
+
         builder1 = new AlertDialog.Builder(this);
         muser = mAuth.getCurrentUser();
         myId = muser.getUid();
@@ -193,22 +196,75 @@ public class ControlPanel extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "choose pdf files only"), 1);
     }
 
+    public  String dumpPdfMetaDataName(Uri uri) {
+        
+        Cursor cursor = getContentResolver()
+                .query(uri, null, null, null, null, null);
+        String displayName = "Not specific";
+        try {
+           
+            if (cursor != null && cursor.moveToFirst()) {
+
+                displayName = cursor.getString(
+
+                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                return displayName;
+                
+            }
+        }
+        
+        finally {
+            cursor.close();
+        }
+        return displayName;
+    }
+
+
+    public  String  dumpPdfMetaDataSize(Uri uri) {
+
+        Cursor cursor = getContentResolver()
+                .query(uri, null, null, null, null, null);
+        int sizeIndex = 0;
+        String size = "Unknown";
+        try {
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+
+                sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+
+                
+                if (!cursor.isNull(sizeIndex)) {
+
+                    size = cursor.getString(sizeIndex);
+                    return size;
+                } else {
+                    size = "Unknown";
+                    return size;
+                }
+                
+            }
+        }
+
+        finally {
+            cursor.close();
+        }
+       return size;
+    }
+    
+    
+    
+    
+    
+    
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data.getData() != null) {
-
-            builder.setMessage("Enter the name of pdf");
-            builder.setCancelable(false);
-            final EditText editText = new EditText(this);
-
-            builder.setView(editText);
-            builder.setPositiveButton("done", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(final DialogInterface dialogInterface, int i) {
-                    final String s = editText.getText().toString().trim();
-                    if (!TextUtils.isEmpty(s)) {
 
                         pdfUrl = data.getData();
                         //get Name of file to store it in firebase Data base reference and Storage
@@ -218,48 +274,37 @@ public class ControlPanel extends AppCompatActivity {
                         progressDialog.setCancelable(false);
                         progressDialog.show();
 
-                        algStorge.child(s).putFile(pdfUrl).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        algStorge.child(dumpPdfMetaDataName(pdfUrl)).putFile(pdfUrl).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
 
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     LectureModel model = new LectureModel();
                                     model.setDownloadLink(task.getResult().getDownloadUrl().toString());
-                                    model.setLecturename(s);
+                                    String Lecturename=dumpPdfMetaDataName(pdfUrl);
+                                    
+                                    model.setLecturename(Lecturename);
                                     model.setDate(getCurrentDate());
                                     model.setUploder_name(muser.getDisplayName() + "");
                                     model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
                                     model.setUploder_id(myId);
                                     algReferenceRoot.push().setValue(model);
                                     progressDialog.dismiss();
-                                    dialogInterface.dismiss();
+
                                     Toast.makeText(ControlPanel.this, "upload done", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(ControlPanel.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
-                                    dialogInterface.dismiss();
+
                                 }
                             }
                         });
 
-                    } else {
-                        Toast.makeText(ControlPanel.this, "name is empty !", Toast.LENGTH_SHORT).show();
-                        editText.setError("name is empty !");
-                        editText.setFocusable(true);
 
 
-                    }
 
 
-                }
-            });
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            builder.show();
+
 
 
         } else {
