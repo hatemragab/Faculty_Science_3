@@ -10,19 +10,18 @@ public class LectureModel {
     private String size;
     private String date;
     private String uploder_name;
-    private String uploder_id;
+
 
 
     public LectureModel() {
     }
 
-    public LectureModel(String downloadLink, String lecturename, String size, String date, String uploder_name, String uploder_id) {
+    public LectureModel(String downloadLink, String lecturename, String size, String date, String uploder_name) {
         this.downloadLink = downloadLink;
         this.lecturename = lecturename;
         this.size = size;
         this.date = date;
         this.uploder_name = uploder_name;
-        this.uploder_id = uploder_id;
     }
 
     public String getDownloadLink() {
@@ -65,11 +64,5 @@ public class LectureModel {
         this.uploder_name = uploder_name;
     }
 
-    public String getUploder_id() {
-        return uploder_id;
-    }
 
-    public void setUploder_id(String uploder_id) {
-        this.uploder_id = uploder_id;
-    }
 }

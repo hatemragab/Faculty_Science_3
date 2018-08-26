@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +44,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 public class ControlPanel extends AppCompatActivity {
     Dialog dialog;
@@ -61,15 +63,18 @@ public class ControlPanel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_panel);
         intializeView();
-        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg");
-        algStorge = FirebaseStorage.getInstance().getReference().child("newAlg");
+        algReferenceRoot = FirebaseDatabase.getInstance().getReference();
+        algStorge = FirebaseStorage.getInstance().getReference();
+
+
         FirebaseRecyclerAdapter<LectureModel, ViewHolder> adapter = new FirebaseRecyclerAdapter<LectureModel, ViewHolder>(
                 LectureModel.class,
                 R.layout.control_panel_rec_item,
                 ViewHolder.class,
-                algReferenceRoot
+                algReferenceRoot.child("control").child("newAlg").child(myId)
+        )
 
-        ) {
+        {
 
             @Override
             protected void populateViewHolder(final ViewHolder viewHolder, final LectureModel model, final int position) {
@@ -92,71 +97,54 @@ public class ControlPanel extends AppCompatActivity {
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
 
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("control").child("newAlg");
+                                Query applesQuery = ref.child(myId).orderByChild("lecturename").equalTo(model.getLecturename());
 
-
-                                Query applesQueryID = algReferenceRoot.child("newAlg").orderByChild("uploder_id").equalTo(myId);
-
-                                final Query applesQueryName = ref.child("newAlg").orderByChild("lecturename").equalTo(model.getLecturename());
-                                //Query applesQueryName = applesQueryID.child("newAlg").orderByChild("uploder_id").equalTo(myId).orderByChild("name").equalTo(model.getLecturename());
-
-                                applesQueryID.addListenerForSingleValueEvent(new ValueEventListener() {
+                                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        Log.d("onDataChang","d");
-                                        applesQueryName.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                Toast.makeText(ControlPanel.this, "دخلهاdataSnapshot", Toast.LENGTH_SHORT).show();
-                                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                                    Toast.makeText(ControlPanel.this, "يارب يخش دي بقا", Toast.LENGTH_SHORT).show();
-                                                    appleSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            algStorge.child(model.getLecturename()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    Toast.makeText(ControlPanel.this, "finally deleted hhhhhh", Toast.LENGTH_SHORT).show();
-                                                                    progressDialog.dismiss();
-                                                                }
-                                                            });
+                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                            appleSnapshot.getRef().removeValue();
 
-                                                        }
-                                                    });
+                                            algStorge.child("newAlg").child(model.getLecturename()).delete();
 
+                                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("allLectures").child("newAlg");
+                                            Query applesQuery = ref.orderByChild("lecturename").equalTo(model.getLecturename());
+                                            applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                        appleSnapshot.getRef().removeValue();
+                                                        progressDialog.dismiss();
+                                                    }
                                                 }
 
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
 
-                                            }
+                                                }
+                                            });
 
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                                Log.d("errordatabase",databaseError.getMessage());
-                                                progressDialog.dismiss();
-                                            }
-                                        });
-                                        progressDialog.dismiss();
 
+                                        }
                                     }
 
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
-                                        Log.e("error", "onCancelled", databaseError.toException());
+
                                     }
                                 });
 
 
                             }
-
-
                         });
                         builder1.show();
-
-
                     }
                 });
 
             }
+
+
         };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -216,19 +204,22 @@ public class ControlPanel extends AppCompatActivity {
     }
 
     public String dumpPdfMetaDataName(Uri uri) {
-
+//get Name of file to store it in firebase Data base reference and Storage
         Cursor cursor = getContentResolver()
                 .query(uri, null, null, null, null, null);
         String displayName = "Not specific";
         try {
 
             if (cursor != null && cursor.moveToFirst()) {
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                StringTokenizer tokenizer = new StringTokenizer(displayName, " # $ [ ] ' ");
+                StringBuilder builder = new StringBuilder();
+                while (tokenizer.hasMoreTokens()) {
+                    builder.append(tokenizer.nextToken().replace(".", "_"));
 
-                displayName = cursor.getString(
+                }
 
-                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                return displayName;
-
+                return builder.toString();
             }
         } finally {
             cursor.close();
@@ -275,35 +266,66 @@ public class ControlPanel extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data.getData() != null) {
 
             pdfUrl = data.getData();
-            //get Name of file to store it in firebase Data base reference and Storage
 
 
-            progressDialog.setMessage("please wait while we are uploading .....");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            //         start uploading the file first to storage then to control finally to the lectures
 
-            algStorge.child(dumpPdfMetaDataName(pdfUrl)).putFile(pdfUrl).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            DatabaseReference checkNameFound = algReferenceRoot.child("allLectures").child("newAlg");
+            checkNameFound.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (!dataSnapshot.hasChild(dumpPdfMetaDataName(pdfUrl))) {
+
+                        progressDialog.setMessage("please wait while we are uploading .....");
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+                        algStorge.child("newAlg").child(dumpPdfMetaDataName(pdfUrl)).putFile(pdfUrl).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    final LectureModel model = new LectureModel();
+                                    model.setDownloadLink(task.getResult().getDownloadUrl().toString());
+                                    String Lecturename = dumpPdfMetaDataName(pdfUrl);
+                                    model.setLecturename(Lecturename);
+                                    model.setDate(getCurrentDate());
+                                    model.setUploder_name(muser.getDisplayName() + "");
+                                    model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
+                                    algReferenceRoot.child("control").child("newAlg").child(myId).child(dumpPdfMetaDataName(pdfUrl)).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()) {
+                                                DatabaseReference r = algReferenceRoot.child("allLectures").child("newAlg");
+
+                                                r.child(dumpPdfMetaDataName(pdfUrl)).setValue(model);
+
+
+                                            }
+
+                                        }
+                                    });
+                                    progressDialog.dismiss();
+                                    Toast.makeText(ControlPanel.this, "upload done", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ControlPanel.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+
+                                }
+                            }
+                        });
+
+
+                    } else {
+                        Toast.makeText(ControlPanel.this, "this file is exist try with dif name", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
 
                 @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        LectureModel model = new LectureModel();
-                        model.setDownloadLink(task.getResult().getDownloadUrl().toString());
-                        String Lecturename = dumpPdfMetaDataName(pdfUrl);
-                        model.setLecturename(Lecturename);
-                        model.setDate(getCurrentDate());
-                        model.setUploder_name(muser.getDisplayName() + "");
-                        model.setSize(task.getResult().getMetadata().getSizeBytes() / 1024 * 1024 + "");
-                        model.setUploder_id(myId);
-                        algReferenceRoot.push().setValue(model);
-                        progressDialog.dismiss();
+                public void onCancelled(DatabaseError databaseError) {
 
-                        Toast.makeText(ControlPanel.this, "upload done", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ControlPanel.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-
-                    }
                 }
             });
 

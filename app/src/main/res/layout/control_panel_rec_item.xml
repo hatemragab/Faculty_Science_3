@@ -36,7 +36,7 @@
                     android:id="@+id/uploader_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" hatem "
+                    android:text="------"
                     android:textColor="#4e3d3d"
                     android:textSize="16sp"
 
@@ -63,7 +63,7 @@
                     android:id="@+id/lecture_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="lecture 1 "
+                    android:text="------"
                     android:textColor="#4e3d3d"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -89,7 +89,7 @@
                     android:id="@+id/pdfsize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12 MB"
+                    android:text="------"
                     android:textColor="#4e3d3d"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -136,7 +136,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="3dp"
-                android:text=""
+                android:text="-------"
                 android:textColor="#4e3d3d"
                 android:textSize="16sp" />
         </RelativeLayout>

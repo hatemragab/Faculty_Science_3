@@ -40,7 +40,7 @@ public class Algorithms_New extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         muser = mAuth.getCurrentUser();
         myId = muser.getUid();
-        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("newAlg");
+        algReferenceRoot = FirebaseDatabase.getInstance().getReference().child("allLectures").child("newAlg");
 
 
         FirebaseRecyclerAdapter<LectureModel, ViewHolder> adapter = new FirebaseRecyclerAdapter<LectureModel, ViewHolder>(
