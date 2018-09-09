@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -25,104 +28,99 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Login_Activity extends AppCompatActivity {
 
-    private LoginButton loginButton;
-
-    private CallbackManager mCallbackManager;
-    private DatabaseReference data_reference;
-    private FirebaseAuth mAuth;
-
+     DatabaseReference data_reference;
+     FirebaseAuth mAuth;
+     EditText ema,pass;
+     Button singIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
-
         // firebase authentication
+        ema = findViewById(R.id.email);
+        pass = findViewById(R.id.password);
+        singIn = findViewById(R.id.btnSginIn);
         mAuth = FirebaseAuth.getInstance();
         data_reference = FirebaseDatabase.getInstance().getReference().child("users");
 
-        // facebook call back manager
-        mCallbackManager = CallbackManager.Factory.create();
 
-        // login button
-        loginButton = findViewById(R.id.button_facebook_login);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        singIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                loginButton.setEnabled(false);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
+            public void onClick(View view) {
 
-            @Override
-            public void onCancel() {
-                Toast.makeText(Login_Activity.this, "Sorry but you must " +
-                        "accept the conditions to continue", Toast.LENGTH_SHORT).show();
-            }
+               String email=  ema.getText().toString().trim();
+               String password=  pass.getText().toString().trim();
 
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(Login_Activity.this, "Error in login facebook " +
-                        ", please check you account then try again \n" +
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (task.isSuccessful())
+                        {
+                            moveTMAinActivity();
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(Login_Activity.this, "emai and pass wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
             }
         });
+
+
 
     }
 
     @Override
     protected void onStart() {
-        // make firebase user
+
         super.onStart();
         FirebaseUser mu = FirebaseAuth.getInstance().getCurrentUser();
         if (mu != null) {
-            updateUI(mu);
+            moveTMAinActivity();
         }
 
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
+//    private void handleFacebookAccessToken(AccessToken token) {
+//
+//        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+//        mAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+//                            if (firebaseUser != null) {
+//
+//                                // insert user to firebase
+//
+//                                data_reference.child(firebaseUser.getUid()).setValue(user);
+//
+//                                // inform user
+//                                Toast.makeText(Login_Activity.this,
+//                                        "Logged in successful", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        }
+//                        Log.e("facebook", task.getException().getMessage());
+//                    }
+//                });
+//    }
+
+    private void moveTMAinActivity() {
+
+        startActivity(new Intent(Login_Activity.this, MainActivity.class));
+
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    public void needNewAccount(View view) {
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            if (firebaseUser != null) {
-
-                                // insert user to firebase
-                                User user = new User(firebaseUser);
-                                data_reference.child(firebaseUser.getUid()).setValue(user);
-
-                                // inform user
-                                Toast.makeText(Login_Activity.this,
-                                        "Logged in successful", Toast.LENGTH_SHORT).show();
-
-                                updateUI(firebaseUser);
-                                return;
-                            }
-                        }
-                        Log.e("facebook", task.getException().getMessage());
-                    }
-                });
+        startActivity(new Intent(this, Register.class));
     }
-
-    private void updateUI(FirebaseUser firebaseUser) {
-
-        startActivity(
-                new Intent(Login_Activity.this, MainActivity.class)
-                        .putExtra("user", new User(firebaseUser))
-        );
-        finish();
-    }
-
 }

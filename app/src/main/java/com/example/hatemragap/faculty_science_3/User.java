@@ -1,42 +1,50 @@
 package com.example.hatemragap.faculty_science_3;
 
-import com.google.firebase.auth.FirebaseUser;
+public class User {
+    private String name;
+    private String id;
+    private String email;
+    private String token;
 
-import java.io.Serializable;
-
-public class User implements Serializable {
-    private final String name;
-    private final String id;
-    private final String imgUrl;
-    private final String email;
-
-    public User(FirebaseUser firebaseUser) {
-        this.name = firebaseUser.getDisplayName();
-        this.id = firebaseUser.getUid();
-        this.imgUrl = firebaseUser.getPhotoUrl().toString();
-        this.email = firebaseUser.getEmail();
+    public User() {
     }
 
-    public User(String name, String id, String imgUrl, String email) {
+    public User(String name, String id, String email, String token) {
         this.name = name;
         this.id = id;
-        this.imgUrl = imgUrl;
         this.email = email;
+        this.token = token;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

@@ -33,8 +33,7 @@ public class AllUsers extends AppCompatActivity {
             @Override
             protected void populateViewHolder(ViewHolder viewHolder, User model, int position) {
                 viewHolder.textName.setText(model.getName());
-                String s = model.getImgUrl();
-                Picasso.get().load(s).placeholder(R.drawable.person).into(viewHolder.imageView);
+
             }
         };
 

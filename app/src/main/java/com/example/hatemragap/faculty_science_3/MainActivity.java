@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,13 +31,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DrawerLayout drawerLayout;
     Toolbar toolbar;
+    BottomNavigationView bottomNavigationView;
+    FirebaseAuth mAuth;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
-
     DatabaseReference database;
     private TextView usernameTextView, userMailTextView;
-
-    private ImageView userImageView;
 
 
     @Override
@@ -48,20 +49,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // support toolbar
         toolbar = findViewById(R.id.maintool);
         setSupportActionBar(toolbar);
-
+        mAuth = FirebaseAuth.getInstance();
         // navigation view
+        bottomNavigationView = findViewById(R.id.mainBottomNav);
+
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View view = navigationView.getHeaderView(0);
         usernameTextView = view.findViewById(R.id.username_textView);
         userMailTextView = view.findViewById(R.id.userMail_textView);
-        userImageView = view.findViewById(R.id.userImage_imageView);
 
         // to show navigationView icon's
         navigationView.setItemIconTintList(null);
 
         // get user from intent
-        User user = (User) getIntent().getSerializableExtra("user");
+
 
         //
         drawerLayout = findViewById(R.id.drower);
@@ -70,17 +72,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        database = FirebaseDatabase.getInstance().getReference().child("users").child(user.getId());
+        database = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String email = dataSnapshot.child("email").getValue(String.class);
-                String imgurl = dataSnapshot.child("imgUrl").getValue(String.class);
                 String name = dataSnapshot.child("name").getValue(String.class);
                 usernameTextView.setText(name);
                 userMailTextView.setText(email);
-                Picasso.get().load(imgurl).into(userImageView);
 
             }
 
