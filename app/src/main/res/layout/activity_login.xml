@@ -1,37 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/AlertDialog.AppCompat"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cddae6"
     android:orientation="vertical"
-    tools:context=".Login_Activity">
-
-    <include layout="@layout/toolbar" />
+    tools:context=".LoginActivity">
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/emailEdtTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="email" />
+        android:layout_margin="8dp"
+        android:hint="@string/email_edt_txt_hint"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/passwordEdtTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" />
+
     <EditText
+        android:id="@+id/passwordEdtTxt"
         android:layout_width="match_parent"
-        android:id="@+id/password"
-        android:hint="password"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:hint="@string/password_edt_txt_hint"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/signInBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/signInBtn"
         android:layout_width="wrap_content"
-        android:hint="sign in"
-        android:id="@+id/btnSginIn"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:hint="@string/sign_in_btn_hint"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/newAccountBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
+        android:id="@+id/newAccountBtn"
         android:layout_width="wrap_content"
-        android:text="need new Account"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="135dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:onClick="needNewAccount"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:text="@string/new_account_btn_txt"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

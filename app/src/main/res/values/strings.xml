@@ -33,5 +33,9 @@
     <string name="lecture_size">Lecture size</string>
     <string name="lecture_name">Lecture name</string>
     <string name="user_image">user image</string>
+    <string name="email_edt_txt_hint">email</string>
+    <string name="password_edt_txt_hint">password</string>
+    <string name="sign_in_btn_hint">Sign in</string>
+    <string name="new_account_btn_txt">need new Account ?</string>
 
 </resources>
